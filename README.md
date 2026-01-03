@@ -139,7 +139,7 @@ src/util/DBUtil.java
 
 Example:
 
-String url = "jdbc:postgresql://localhost:5432/restaurantdb";
+String url = "jdbc:postgresql://localhost:5432/testdb";
 String user = "postgres";
 String password = "your_password";
 
