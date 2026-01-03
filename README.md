@@ -69,30 +69,66 @@ restaurantdb
 ## 🧾 Table Structure
 
 ### 🔐 admin table
-```sql
+
+(Only username & password)
+
 CREATE TABLE admin (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(100) NOT NULL
 );
 
 📝 orders table
+
+(All order + refund-related columns)
+
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
-    customer_name VARCHAR(100),
-    item_name VARCHAR(100),
-    quantity INT,
-    price DOUBLE PRECISION,
-    status VARCHAR(30)
+    item_name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    price DOUBLE PRECISION NOT NULL,
+    subtotal DOUBLE PRECISION,
+    gst DOUBLE PRECISION,
+    discount DOUBLE PRECISION,
+    service_charge DOUBLE PRECISION,
+    final_amount DOUBLE PRECISION,
+    status VARCHAR(30),
+
+    refund_amount DOUBLE PRECISION,
+    refund_status VARCHAR(30),
+    refund_type VARCHAR(30)
+);
 );
 
 💰 refund_orders table
+
+(Refund history table)
+
 CREATE TABLE refund_orders (
     refund_id SERIAL PRIMARY KEY,
     order_id INT,
+    item_name VARCHAR(100),
+    quantity INT,
+    price DOUBLE PRECISION,
+    subtotal DOUBLE PRECISION,
+    gst DOUBLE PRECISION,
+    discount DOUBLE PRECISION,
+    service_charge DOUBLE PRECISION,
+    final_amount DOUBLE PRECISION,
+    status VARCHAR(30),
+
     refund_amount DOUBLE PRECISION,
-    refund_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    refund_status VARCHAR(30),
+
+    CONSTRAINT fk_order
+        FOREIGN KEY (order_id)
+        REFERENCES orders(order_id)
+        ON DELETE CASCADE
 );
+
+✅ Optional: Insert sample admin
+INSERT INTO admin (username, password)
+VALUES ('admin', 'admin123');
+
 
 ⚙️ Database Configuration
 
@@ -133,6 +169,18 @@ Password: admin123
 .Menu-driven console application
 .Database connectivity in Java
 .Clean project structure
+
+✅ Why this design is good (Interview point ⭐)
+
+orders → main order + refund tracking
+
+refund_orders → keeps refund history
+
+Foreign key ensures data integrity
+
+SERIAL used for auto-increment
+
+PostgreSQL compatible (DOUBLE PRECISION)
 
 👩‍💻 Author
 
